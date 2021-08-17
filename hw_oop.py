@@ -35,14 +35,9 @@ class Student:
             else:
                 print(f'{self.name} {self.surname} учится лучше, чем {other_student.name} {other_student.surname}')
             return compare
-
     def __str__(self):
         cours_prog = ', '.join(self.courses_in_progress)
-        if lesson_type in self.courses_in_progress:
-            res = f' Имя: {self.name}\n Фамилия: {self.surname}\n Средняя оценка за лекции: {self.sum_gr(self.grades, lesson_type)}\n Курсы в процессе изучения: {cours_prog}\n Завершенные курсы: {"".join(self.finished_curses)}'
-            return res
-        else:
-            return print(self) 
+        return f' Имя: {self.name}\n Фамилия: {self.surname}\n Средняя оценка за лекцию: {self.sum_gr()}\n Курсы в процессе изучения: {cours_prog}\n Завершенные курсы: {" ".join(self.finished_curses)}'
 
 class Mentor:
     def __init__(self, name, surname):
@@ -72,12 +67,7 @@ class Lecturer(Mentor):
                 print(f'{self.name} {self.surname} ведёт лучше, чем {other_lecturer.name} {other_lecturer.surname}')
             return compare
     def __str__(self):
-        lesson_type = input('Введите название лекции: ')
-        if lesson_type in self.courses_attached:
-            res = f' Имя: {self.name}\n Фамилия: {self.surname}\n Средняя оценка за лекции: {self.sum_gr(self.grades, lesson_type)}'
-            return res
-        else:
-            return print(self)
+        return f' Имя: {self.name}\n Фамилия: {self.surname}\n Средняя оценка за ведение лекции: {self.sum_gr_lect()}'
 
 class Reviewer(Mentor):
     def rate_hw(self, student, course, grade):
@@ -104,11 +94,11 @@ class Reviewer(Mentor):
 peter = Student('Пётр', 'Павлов', 'м')
 peter.courses_in_progress += ['Python']
 peter.courses_in_progress += ['Git']
-peter.finished_curses += ['Введение в проограммирование']
+peter.finished_curses += ['Введение в программирование']
 kris = Student('Кристина', 'Степанова', 'ж')
 kris.courses_in_progress += ['Python']
 kris.courses_in_progress += ['Git']
-kris.finished_curses += ['Введение в проограммирование']
+kris.finished_curses += ['Введение в программирование']
 
 nik = Lecturer('Николай', 'Семёнович')
 nik.grades = {}
@@ -141,14 +131,32 @@ ivan.rate_stud(peter, 'Git', 9)
 ivan.rate_stud(kris, 'Git', 10)
 ivan.rate_stud(kris, 'Git', 8)
   
-
 # print(peter < kris)
-print(nik < sam)
+# print(nik < sam)
 # print(peter)
 # print(kris)
+# print(nik)
 # print(peter.sum_gr())
 # print(sam.sum_gr_lect())
 # print(nik.sum_gr_lect())
 # print(sam.__dict__)
 # print(peter.__dict__)
-# print(vladimir.checking_hw('peter', 'Python', 'дз1'))
+
+def hw_grade(student_list, course):
+    counter = 0
+    for student in student_list:
+        for c, grades in student.grades.items():
+            if c == course:
+                counter += sum(grades) / len(grades)
+    return round(counter / len(student_list), 2)
+# print(hw_grade([peter, kris], 'Python'))
+
+def lec_grade(lector_list, course):
+    counter = 0
+    for lector in lector_list:
+        for k, grades in lector.grades.items():
+            if k == course:
+                counter += sum(grades) / len(grades)
+    return round(counter / len(lector_list), 2)
+# print(lec_grade([nik, sam], 'Python'))
+
